@@ -1,6 +1,6 @@
 {
   "name": "yec-plugins",
-  "owner": "ye-c",
+  "owner": { "name": "ye-c" },
   "plugins": [{
     "name": "wiki",
     "source": { "source": "github", "repo": "ye-c/wiki-sync" }
