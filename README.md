@@ -4,17 +4,65 @@
 
 ## 安装
 
-### 方式一：从 GitHub 安装（推荐）
+### 方式一：手动配置（稳定，推荐）
+
+由于 `/plugin install` 目前存在 bug（报成功但未写入 installed_plugins.json），推荐手动完成以下 5 步：
+
+**1. 克隆仓库到 marketplaces 目录**
+```bash
+git clone git@github.com:ye-c/wiki-sync.git ~/.claude/plugins/marketplaces/wiki-marketplace
+```
+
+**2. 创建符号链接**
+```bash
+ln -s ~/.claude/plugins/marketplaces/wiki-marketplace ~/.claude/plugins/wiki
+```
+
+**3. 添加 marketplace 到 known_marketplaces.json**
+```json
+"wiki-marketplace": {
+  "source": {
+    "source": "file",
+    "path": "/Users/yec/.claude/plugins/marketplaces/wiki-marketplace/.claude-plugin/marketplace.json"
+  },
+  "installLocation": "/Users/yec/.claude/plugins/marketplaces/wiki-marketplace",
+  "lastUpdated": "2026-05-09T00:00:00.000Z"
+}
+```
+
+**4. 添加插件到 installed_plugins.json**
+```json
+"wiki@wiki-marketplace": [
+  {
+    "scope": "user",
+    "installPath": "/Users/yec/.claude/plugins/wiki",
+    "version": "0.1.0",
+    "installedAt": "2026-05-09T00:00:00.000Z",
+    "lastUpdated": "2026-05-09T00:00:00.000Z"
+  }
+]
+```
+
+**5. 在 settings.json 的 enabledPlugins 中启用**
+```json
+"wiki@wiki-marketplace": true
+```
+
+完成后重启 Claude Code。
+
+### 方式二：尝试 /plugin 命令（可能有 bug）
 
 ```bash
 # 添加 marketplace
 /plugin marketplace add ye-c/wiki-sync
 
 # 安装插件
-/plugin install wiki
+/plugin install wiki@yec-plugins
 ```
 
-### 方式二：本地开发调试
+如果 `/plugin install` 后 `/wiki:init` 报 unknown skill，需要手动修复 `installed_plugins.json`（参照方式一第 4 步）。
+
+### 方式三：本地开发调试
 
 ```bash
 cc --plugin-dir ~/code/wiki-sync
