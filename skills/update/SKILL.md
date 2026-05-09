@@ -1,5 +1,4 @@
 ---
-name: wiki:update
 description: 增量更新 wiki：基于 git diff 变更文件更新对应 wiki 页（update 命令）
 ---
 

@@ -1,5 +1,4 @@
 ---
-name: wiki:init
 description: 在当前项目创建 .wiki/ 知识库骨架（init 命令）
 ---
 

@@ -1,5 +1,4 @@
 ---
-name: wiki:query
 description: 基于 wiki 知识库回答项目问题（query 命令）
 ---
 

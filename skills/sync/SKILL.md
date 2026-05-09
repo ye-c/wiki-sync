@@ -1,5 +1,4 @@
 ---
-name: wiki:sync
 description: 全量解析项目代码并生成完整 wiki（sync 命令）
 ---
 
