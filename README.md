@@ -6,36 +6,35 @@
 
 ### 方式一：手动配置（稳定，推荐）
 
-由于 `/plugin install` 目前存在 bug（报成功但未写入 installed_plugins.json），推荐手动完成以下 5 步：
+由于 `/plugin install` 目前存在 bug（报成功但未写入 installed_plugins.json），推荐手动完成以下 4 步：
 
-**1. 克隆仓库到 marketplaces 目录**
+**1. 克隆仓库**
 ```bash
-git clone git@github.com:ye-c/wiki-sync.git ~/.claude/plugins/marketplaces/wiki-marketplace
+git clone git@github.com:ye-c/wiki-sync.git ~/.claude/plugins/wiki
 ```
 
-**2. 创建符号链接**
-```bash
-ln -s ~/.claude/plugins/marketplaces/wiki-marketplace ~/.claude/plugins/wiki
-```
+**2. 添加 marketplace 到 known_marketplaces.json**
 
-**3. 添加 marketplace 到 known_marketplaces.json**
+在 `~/.claude/plugins/known_marketplaces.json` 中添加（路径用实际路径，`~` 可展开）：
 ```json
-"wiki-marketplace": {
+"yec-plugins": {
   "source": {
     "source": "file",
-    "path": "/Users/yec/.claude/plugins/marketplaces/wiki-marketplace/.claude-plugin/marketplace.json"
+    "path": "/Users/<你的用户名>/.claude/plugins/wiki/.claude-plugin/marketplace.json"
   },
-  "installLocation": "/Users/yec/.claude/plugins/marketplaces/wiki-marketplace",
+  "installLocation": "/Users/<你的用户名>/.claude/plugins/wiki",
   "lastUpdated": "2026-05-09T00:00:00.000Z"
 }
 ```
 
-**4. 添加插件到 installed_plugins.json**
+**3. 添加插件到 installed_plugins.json**
+
+在 `~/.claude/plugins/installed_plugins.json` 的 `plugins` 对象中添加：
 ```json
-"wiki@wiki-marketplace": [
+"wiki@yec-plugins": [
   {
     "scope": "user",
-    "installPath": "/Users/yec/.claude/plugins/wiki",
+    "installPath": "/Users/<你的用户名>/.claude/plugins/wiki",
     "version": "0.1.0",
     "installedAt": "2026-05-09T00:00:00.000Z",
     "lastUpdated": "2026-05-09T00:00:00.000Z"
@@ -43,9 +42,9 @@ ln -s ~/.claude/plugins/marketplaces/wiki-marketplace ~/.claude/plugins/wiki
 ]
 ```
 
-**5. 在 settings.json 的 enabledPlugins 中启用**
+**4. 在 settings.json 的 enabledPlugins 中启用**
 ```json
-"wiki@wiki-marketplace": true
+"wiki@yec-plugins": true
 ```
 
 完成后重启 Claude Code。
@@ -60,7 +59,7 @@ ln -s ~/.claude/plugins/marketplaces/wiki-marketplace ~/.claude/plugins/wiki
 /plugin install wiki@yec-plugins
 ```
 
-如果 `/plugin install` 后 `/wiki:init` 报 unknown skill，需要手动修复 `installed_plugins.json`（参照方式一第 4 步）。
+如果 `/plugin install` 后 `/wiki:init` 报 unknown skill，需要手动修复 `installed_plugins.json`（参照方式一第 3 步）。
 
 ### 方式三：本地开发调试
 
