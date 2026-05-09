@@ -10,36 +10,47 @@
 
 **1. 克隆仓库**
 ```bash
+# 先清理旧目录（如果有）
+rm -rf ~/.claude/plugins/wiki
+rm -rf ~/.claude/plugins/cache/wiki-marketplace
+
 git clone git@github.com:ye-c/wiki-sync.git ~/.claude/plugins/wiki
 ```
 
 **2. 添加 marketplace 到 known_marketplaces.json**
 
-在 `~/.claude/plugins/known_marketplaces.json` 中添加（路径用实际路径，`~` 可展开）：
+在 `~/.claude/plugins/known_marketplaces.json` 中添加 entry（文件不存在会自动创建）。注意路径用实际路径：
 ```json
-"yec-plugins": {
-  "source": {
-    "source": "file",
-    "path": "/Users/<你的用户名>/.claude/plugins/wiki/.claude-plugin/marketplace.json"
-  },
-  "installLocation": "/Users/<你的用户名>/.claude/plugins/wiki",
-  "lastUpdated": "2026-05-09T00:00:00.000Z"
+{
+  "yec-plugins": {
+    "source": {
+      "source": "file",
+      "path": "/Users/chace.ye/.claude/plugins/wiki/.claude-plugin/marketplace.json"
+    },
+    "installLocation": "/Users/chace.ye/.claude/plugins/wiki",
+    "lastUpdated": "2026-05-09T00:00:00.000Z"
+  }
 }
 ```
 
 **3. 添加插件到 installed_plugins.json**
 
-在 `~/.claude/plugins/installed_plugins.json` 的 `plugins` 对象中添加：
+在 `~/.claude/plugins/installed_plugins.json` 的 `plugins` 对象中添加 entry。注意：该文件有外层 `version` 和 `plugins` 包装，**不要**替换整个文件，只在 `plugins` 对象内插入：
 ```json
-"wiki@yec-plugins": [
-  {
-    "scope": "user",
-    "installPath": "/Users/<你的用户名>/.claude/plugins/wiki",
-    "version": "0.1.0",
-    "installedAt": "2026-05-09T00:00:00.000Z",
-    "lastUpdated": "2026-05-09T00:00:00.000Z"
+{
+  "version": 2,
+  "plugins": {
+    "wiki@yec-plugins": [
+      {
+        "scope": "user",
+        "installPath": "/Users/chace.ye/.claude/plugins/wiki",
+        "version": "0.1.0",
+        "installedAt": "2026-05-09T00:00:00.000Z",
+        "lastUpdated": "2026-05-09T00:00:00.000Z"
+      }
+    ]
   }
-]
+}
 ```
 
 **4. 在 settings.json 的 enabledPlugins 中启用**
