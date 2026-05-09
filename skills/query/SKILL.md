@@ -9,11 +9,11 @@ description: 基于 wiki 知识库回答项目问题（query 命令）
 ## 前置条件
 
 - `.wiki/` 目录已存在
-- `wiki/index.md` 存在
+- `.wiki/wiki/index.md` 存在
 
 ## 执行步骤
 
-1. **读取 `wiki/index.md`** 了解项目整体结构
+1. **读取 `.wiki/wiki/index.md`** 了解项目整体结构
 
 2. **定位相关 wiki 页面**
    - 根据用户问题关键词匹配模块页
@@ -34,4 +34,4 @@ description: 基于 wiki 知识库回答项目问题（query 命令）
 
 用户问："用户模块的核心函数是什么？"
 
-回答应基于 `wiki/modules/user.md` 内容，并引用来源。
+回答应基于 `.wiki/wiki/modules/user.md` 内容，并引用来源。
