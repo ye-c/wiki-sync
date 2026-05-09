@@ -25,9 +25,9 @@ git clone git@github.com:ye-c/wiki-sync.git ~/.claude/plugins/wiki
   "yec-plugins": {
     "source": {
       "source": "file",
-      "path": "/Users/chace.ye/.claude/plugins/wiki/.claude-plugin/marketplace.json"
+      "path": "/Users/<your-username>/.claude/plugins/wiki/.claude-plugin/marketplace.json"
     },
-    "installLocation": "/Users/chace.ye/.claude/plugins/wiki",
+    "installLocation": "/Users/<your-username>/.claude/plugins/wiki",
     "lastUpdated": "2026-05-09T00:00:00.000Z"
   }
 }
@@ -43,7 +43,7 @@ git clone git@github.com:ye-c/wiki-sync.git ~/.claude/plugins/wiki
     "wiki@yec-plugins": [
       {
         "scope": "user",
-        "installPath": "/Users/chace.ye/.claude/plugins/wiki",
+        "installPath": "/Users/<your-username>/.claude/plugins/wiki",
         "version": "0.1.0",
         "installedAt": "2026-05-09T00:00:00.000Z",
         "lastUpdated": "2026-05-09T00:00:00.000Z"
