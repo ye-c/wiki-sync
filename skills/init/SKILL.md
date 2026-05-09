@@ -1,15 +1,16 @@
 ---
-description: 在当前项目创建 .wiki/ 知识库骨架（init 命令）
+description: 全量解析项目代码并生成完整 wiki
 ---
 
 # Wiki Init
 
-在当前项目根目录创建 `.wiki/` 知识库骨架。
+在当前项目根目录创建 `.wiki/` 知识库骨架，并全量生成 wiki。
 
 ## 执行步骤
 
 1. **检查是否已存在 `.wiki/`**
-   - 如果存在，提示用户已初始化，无需重复操作
+   - 如果存在，跳过骨架创建，直接全量生成
+   - 如果不存在，创建完整骨架
 
 2. **创建目录结构**
    ```
@@ -76,14 +77,14 @@ description: 在当前项目创建 .wiki/ 知识库骨架（init 命令）
    - 模块间引用：[模块名](file:模块.md)
    - ⚠️ 标注存疑或矛盾之处
 
-   ## 4. /wiki update 策略
+   ## 4. /wiki sync 策略（增量更新）
    - 变更文件 → 判断属于哪个 wiki 模块页
    - 新增 → 补充对应 wiki
    - 修改 → 替换对应段落
    - 删除 → 标记 [过时]
    ```
 
-6. **生成空的 `wiki/index.md`**
+6. **生成 `wiki/index.md`**
    ```markdown
    # 项目 Wiki
 
@@ -98,14 +99,39 @@ description: 在当前项目创建 .wiki/ 知识库骨架（init 命令）
    ## 业务流程
    ```
 
-## 输出
+7. **全量扫描项目文件**
+   - 按 include 规则扫描项目
+   - 按 exclude 规则过滤文件
+   - 按目录/模块归类文件
 
-完成后提示用户：
-```
-✅ .wiki/ 知识库已初始化
-   - config.json: 包含/排除规则
-   - schema/system.md: LLM 代码解析规则
-   - wiki/index.md: 项目总览页
+8. **识别项目入口**
+   - 查找 main, index, app, server, serve, cli, main.go 等入口文件
+   - 确定项目类型（TypeScript/JS/Python/Go）
 
-下一步：运行 /wiki:sync 生成完整 wiki
-```
+9. **按模块生成 wiki 页面**
+   - 每次 LLM 调用处理一个模块
+   - 输出到 `wiki/modules/<模块名>.md`
+   - API 路由输出到 `wiki/apis/<模块名>.md`
+   - 数据模型输出到 `wiki/models/<模块名>.md`
+
+10. **生成 `wiki/index.md`** 汇总所有模块
+
+11. **更新 `last_sync_commit`**
+    - 同步完成后，将 config.json 中的 `last_sync_commit` 更新为当前 HEAD commit
+
+## 输出格式
+
+每个模块页必须包含：
+- 模块职责（一句话）
+- 核心文件路径
+- 关键函数/类（名称 + 用途）
+- 依赖模块（引用其他 wiki 页面）
+- 重要流程（如果是 API 则标注 method + path）
+
+模块间引用格式：`[模块名](file:模块.md)`
+
+## 提示
+
+- 大项目分批处理，避免单次 LLM 调用超时
+- 标注存疑或矛盾之处用 ⚠️
+- 生成完成后提示用户共生成了多少模块

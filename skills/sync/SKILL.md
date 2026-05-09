@@ -1,10 +1,10 @@
 ---
-description: 全量解析项目代码并生成完整 wiki（sync 命令）
+description: 增量更新 wiki：基于 git diff 变更文件更新对应 wiki 页
 ---
 
 # Wiki Sync
 
-全量解析项目代码，生成完整的 `.wiki/` 知识库。
+增量更新 wiki：读取 git diff 变更文件，只更新涉及的 wiki 页面。
 
 ## 前置条件
 
@@ -12,47 +12,47 @@ description: 全量解析项目代码并生成完整 wiki（sync 命令）
 
 ## 执行步骤
 
-1. **读取 `.wiki/config.json`** 获取 include/exclude 规则和 last_sync_commit
+1. **读取 `.wiki/config.json`** 获取 `last_sync_commit`
+   - 必须先执行此步，将 `last_sync_commit` 的值记录下来
+   - **不要跳过此步，不要用 HEAD 替代**
 
-2. **确定增量起点**
-   - 如果 `last_sync_commit` 存在，用它作为起点：`git diff <last_sync_commit>...HEAD`
-   - 否则全量扫描
+2. **获取变更文件列表**
+   ```bash
+   git diff --name-only <上一步获取的last_sync_commit>...HEAD
+   ```
+   - 将 `<last_sync_commit>` 替换为第 1 步获取的实际 commit hash
+   - 如果没有变更，提示"没有检测到代码变更"
 
-3. **扫描项目文件**
-   - 按 include 规则扫描项目
-   - 按 exclude 规则过滤文件（node_modules, .venv, vendor, __pycache__ 等依赖/缓存目录不读）
-   - 按目录/模块归类文件
+3. **按路径判断属于哪个 wiki 模块**
+   - 读取当前 wiki 结构
+   - 将变更文件映射到对应模块页
+   - 如果变更文件在 exclude 列表中（如 node_modules, .venv），跳过
 
-4. **识别项目入口**
-   - 查找 main, index, app, server, serve, cli, main.go 等入口文件
-   - 确定项目类型（TypeScript/JS/Python/Go）
+4. **读取变更文件的 diff 内容**
+   ```bash
+   git diff <上一步的last_sync_commit>...HEAD -- <文件路径>
+   ```
 
-5. **按模块生成 wiki 页面**
-   - 每次 LLM 调用处理一个模块
-   - 输出到 `wiki/modules/<模块名>.md`
-   - API 路由输出到 `wiki/apis/<模块名>.md`
-   - 数据模型输出到 `wiki/models/<模块名>.md`
+5. **LLM 单次调用处理每个受影响的模块**
+   - 输入：变更文件内容 + diff + 对应 wiki 页 + schema/system.md
+   - 输出：更新后的 wiki Markdown
 
-6. **生成 `wiki/index.md`** 汇总所有模块
+6. **写入文件**
+   - 检查文件 mtime 是否在读取后有修改（有冲突 → warning + 提示人手动合并）
+   - 写入更新后的内容
 
-7. **如果 `schema/system.md` 缺失，生成默认模板**
+7. **更新 `wiki/index.md`** 如果有新模块被添加
 
-8. **更新 `last_sync_commit`**
-   - 同步完成后，将 config.json 中的 `last_sync_commit` 更新为当前 HEAD commit
+8. **更新 `config.json` 中的 `last_sync_commit`** 为当前 HEAD commit
 
-## 输出格式
+## 冲突处理
 
-每个模块页必须包含：
-- 模块职责（一句话）
-- 核心文件路径
-- 关键函数/类（名称 + 用途）
-- 依赖模块（引用其他 wiki 页面）
-- 重要流程（如果是 API 则标注 method + path）
-
-模块间引用格式：`[模块名](file:模块.md)`
+- 读取 wiki 文件时记录 mtime
+- 写入前检查 mtime 是否变化
+- 有冲突 → warning + 提示手动合并，不覆盖
 
 ## 提示
 
-- 大项目分批处理，避免单次 LLM 调用超时
-- 标注存疑或矛盾之处用 ⚠️
-- 生成完成后提示用户共生成了多少模块
+- 删除文件 → 在对应 wiki 页标记 `[过时]`
+- 新增文件 → 补充到对应 wiki 页
+- 修改文件 → 替换对应段落

@@ -82,9 +82,8 @@ cc --plugin-dir ~/code/wiki-sync
 
 | 命令 | 作用 |
 |------|------|
-| `/wiki:init` | 在当前项目创建 `.wiki/` 骨架 |
-| `/wiki:sync` | 全量解析项目 → 生成完整 wiki |
-| `/wiki:update` | 增量更新：git diff 变更 → 更新对应 wiki 页 |
+| `/wiki:init` | 全量生成完整 wiki |
+| `/wiki:sync` | 增量更新：git diff 变更 → 更新对应 wiki 页 |
 | `/wiki:query <问题>` | 基于 wiki 回答项目问题 |
 
 ## 设计原则
@@ -113,10 +112,9 @@ project/
 ## 工作流程
 
 ```
-1. /wiki:init        # 初始化 wiki 骨架
-2. /wiki:sync        # 全量生成 wiki
-3. /wiki:update      # 每次代码变更后增量更新
-4. /wiki:query       # 日常提问，基于 wiki 回答
+1. /wiki:init        # 初始化 + 全量生成 wiki
+2. /wiki:sync        # 每次代码变更后增量更新
+3. /wiki:query       # 日常提问，基于 wiki 回答
 ```
 
 ## 要求
