@@ -41,6 +41,27 @@ cc --plugin-dir ~/code/wiki-sync
 3. /wiki:query       # 日常提问，基于 wiki 回答
 ```
 
+## 多语言支持
+
+默认配置仅适用于 **Python 项目**（`include: ["src/**/*.{py}"]`）。
+
+### 修改为其他语言
+
+编辑 `.wiki/config.json` 中的 `include` 字段：
+
+```json
+// TypeScript/Node.js
+"include": ["src/**/*.{ts,js}"]
+
+// Go
+"include": ["**/*.go"]
+
+// 混合项目
+"include": ["src/**/*.{py}", "src/**/*.ts"]
+```
+
+相应调整 `exclude` 字段（如 Python 不需要 `node_modules`，但 Node.js 不需要 `.venv`）。
+
 ## 要求
 
 - Claude Code 1.0+

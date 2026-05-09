@@ -36,11 +36,11 @@ description: 全量解析项目代码并生成完整 wiki
    ```json
    {
      "version": 1,
-     "include": ["src/**/*.{ts,js,py,go}"],
+     "include": ["src/**/*.py"],
      "exclude": [
        "node_modules", "dist", ".git", ".venv", "venv", "env",
-       "vendor", "__pycache__", ".pytest_cache", "*.test.ts", "*.spec.ts",
-       "_test.go", "*.md", "build", "*.lock", "package-lock.json"
+       "vendor", "__pycache__", ".pytest_cache", "*.test.py",
+       "*.md", "build", "*.lock"
      ],
      "schemaVersion": "1"
    }
@@ -51,7 +51,7 @@ description: 全量解析项目代码并生成完整 wiki
    - `vendor` — Go/PHP/其他语言的依赖目录
    - `node_modules` — Node.js 依赖
    - `__pycache__`, `.pytest_cache` — Python 缓存
-   - `*.lock`, `package-lock.json` — 锁定文件（不读内容）
+   - `*.lock` — 锁定文件（不读内容）
 
 5. **生成 `schema/system.md`**（核心文件，告知 LLM 如何解析代码）
 
@@ -82,6 +82,11 @@ description: 全量解析项目代码并生成完整 wiki
    - 新增 → 补充对应 wiki
    - 修改 → 替换对应段落
    - 删除 → 标记 [过时]
+
+   ## 5. 扫描规则
+   - 扫描 include 路径下所有文件
+   - 未归入预定义模块的文件 → 归入 "core" 模块（存放 config、constants、utils 等共享基础设施）
+   - 不静默跳过任何源码文件
    ```
 
 6. **生成 `wiki/index.md`**
