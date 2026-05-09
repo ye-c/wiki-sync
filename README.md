@@ -8,7 +8,7 @@
 
 ```bash
 # 添加 marketplace
-/plugin marketplace add yec/wikisync
+/plugin marketplace add yec/wiki-sync
 
 # 安装插件
 /plugin install wiki
@@ -17,7 +17,7 @@
 ### 方式二：本地开发调试
 
 ```bash
-cc --plugin-dir ~/code/wikisync
+cc --plugin-dir ~/code/wiki-sync
 ```
 
 ## 命令
