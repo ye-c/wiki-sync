@@ -8,7 +8,7 @@
 
 ```bash
 # 添加 marketplace
-/plugin marketplace add yec/wiki-sync
+/plugin marketplace add ye-c/wiki-sync
 
 # 安装插件
 /plugin install wiki
