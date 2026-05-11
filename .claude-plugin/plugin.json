@@ -1,6 +1,6 @@
 {
   "name": "wiki",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "维护项目 .wiki/ 知识库，让 LLM 直接读 wiki 回答项目问题",
   "author": {
     "name": "yec"
